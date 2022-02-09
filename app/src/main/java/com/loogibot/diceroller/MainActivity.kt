@@ -2,7 +2,8 @@ package com.loogibot.diceroller
 
 import android.os.Bundle
 import android.widget.Button
-import android.widget.TextView
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 /**
@@ -17,8 +18,9 @@ class MainActivity : AppCompatActivity() {
         val rollButton: Button = findViewById(R.id.button)
         rollButton.setOnClickListener { rollDice() }
 
-        val rollButton2: Button = findViewById(R.id.button2)
-        rollButton2.setOnClickListener { rollDice() }
+        //Do a dice roll when the app start
+        rollDice()
+
     }
 
     /**
@@ -30,16 +32,25 @@ class MainActivity : AppCompatActivity() {
         val diceRoll = dice.roll()
         // creates a roll by calling the roll() method/fun in Dice(), which returns a random(Int) with range 1..numSides
 
-        val resultTextView: TextView = findViewById(R.id.textView)
-        // finds textView with id, and assigns it to a new resultTextView val, updating the screen with the dice roll
-        resultTextView.text = diceRoll.toString()
-        // turns diceRoll Int to String
+        val diceImage: ImageView = findViewById(R.id.imageView)
+        // finds imageview with id, and assigns it to a new diceroll val, updating the screen with the dice roll
 
-        val dice2 = Dice(6)
-        val diceRoll2 = dice.roll()
-        val resultTextView2: TextView = findViewById(R.id.textView2)
-        resultTextView2.text = diceRoll2.toString()
-    }
+        val drawableResource = when (diceRoll) {
+            1 -> R.drawable.dice_1
+            2 -> R.drawable.dice_2
+            3 -> R.drawable.dice_3
+            4 -> R.drawable.dice_4
+            5 -> R.drawable.dice_5
+            else -> R.drawable.dice_6
+        }
+
+        diceImage.setImageResource(drawableResource)
+        // sets the image to dice
+        diceImage.contentDescription = diceRoll.toString()
+
+        val toast = Toast.makeText(applicationContext, diceRoll.toString(), Toast.LENGTH_SHORT)
+        toast.show()
+
 }
 
 class Dice(private val numSides: Int) {
@@ -48,3 +59,5 @@ class Dice(private val numSides: Int) {
         return (1..numSides).random()
     }
 }
+}
+
